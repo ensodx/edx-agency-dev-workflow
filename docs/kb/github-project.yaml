@@ -1,0 +1,43 @@
+version: "1"
+updated: "2026-04-07"
+
+# GitHub Projects V2 configuration for the project board.
+# Orchestrator uses these IDs when creating/updating issues via the GitHub MCP.
+# Replace all placeholder values with actual IDs from your GitHub project.
+
+project:
+  url: "https://github.com/orgs/ensodx/projects/TODO"
+  id: "PVT_TODO"
+  title: "edx-agency-project"
+  org: "ensodx"
+  repo: "ensodx/edx-agency-project"
+
+fields:
+  status:
+    id: "PVTSSF_TODO_STATUS"
+    options:
+      todo: "TODO"
+      inProgress: "TODO"
+      done: "TODO"
+
+  priority:
+    id: "PVTSSF_TODO_PRIORITY"
+    options:
+      P0: "TODO"
+      P1: "TODO"
+      P2: "TODO"
+
+  size:
+    id: "PVTSSF_TODO_SIZE"
+    options:
+      XS: "TODO"
+      S: "TODO"
+      M: "TODO"
+      L: "TODO"
+      XL: "TODO"
+
+# Orchestrator guidance:
+# - When opening an agent-escalation issue: set status=todo, priority=P0
+# - When a phase starts: set status=inProgress
+# - When a phase completes (all tasks [x]): set status=done
+# - Size maps roughly to phase scope: XS=single task, S=2-3 tasks, M=phase, L=multi-phase, XL=milestone

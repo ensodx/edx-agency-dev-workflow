@@ -1,0 +1,17 @@
+{
+  "$schema": "edx-agency/handoff/validator@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "validator",
+  "retryCount": 0,
+  "verdict": "PASS",
+  "blockingIssues": [
+    { "issue": "Description of the issue.", "file": "src/...", "line": 0, "reason": "Why this blocks." }
+  ],
+  "nonBlockingIssues": [
+    { "issue": "Description of the issue.", "file": "src/...", "recommendation": "What to do." }
+  ],
+  "phaseObjectiveAlignment": "ALIGNED",
+  "deviation": null
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "edx-agency/handoff/architect@1",
+  "phase": 0,
+  "date": "2026-04-07",
+  "status": "completed",
+  "from": "architect",
+  "to": ["planner", "tester"],
+  "requirement": "Build a minimal HTTP server that responds to GET / with a Hello World JSON message and GET /health with a status check, backed by Zod-validated config and pino structured logging.",
+  "acceptanceCriteria": [
+    { "id": "AC-1", "criterion": "GET / returns HTTP 200 with body { \"message\": \"Hello, World!\" }", "testable": true },
+    { "id": "AC-2", "criterion": "GET /health returns HTTP 200 with body { \"status\": \"ok\" }", "testable": true },
+    { "id": "AC-3", "criterion": "Unknown routes return HTTP 404 with body { \"code\": \"NOT_FOUND\", \"message\": \"...\" }", "testable": true },
+    { "id": "AC-4", "criterion": "PORT is loaded from .env via Zod schema; defaults to 3000 when not set; CONFIG_INVALID is thrown on invalid values", "testable": true },
+    { "id": "AC-5", "criterion": "Every request log entry includes requestId, method, url, and component fields", "testable": true }
+  ],
+  "approach": "Node.js built-in http module with no HTTP framework. Zod validates process.env at startup. pino provides structured JSON logs. AppErrorCode enum for all error identifiers. createApp() factory returns start/stop controls for testability without process coupling.",
+  "adrs": ["adr-001-no-http-framework.md"],
+  "constraintsDiscovered": [
+    "distroless runner has no shell -- CMD must reference dist/index.js directly without a node prefix",
+    "dotenv must be imported before zod schema parse to ensure process.env is populated"
+  ],
+  "risks": [
+    { "risk": "Node built-in http has no built-in body parsing or routing -- acceptable for hello world scope", "mitigation": "Scope is intentionally minimal; framework can be added in a later phase if needed" }
+  ]
+}

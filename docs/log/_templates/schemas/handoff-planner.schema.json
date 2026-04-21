@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "edx-agency/handoff/planner@1",
+  "type": "object",
+  "required": ["$schema", "phase", "date", "status", "from", "to", "tasks", "githubIssues"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "const": "edx-agency/handoff/planner@1" },
+    "phase": { "type": "number" },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "status": { "type": "string", "enum": ["completed"] },
+    "from": { "type": "string", "const": "planner" },
+    "to": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "files"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^T-\\d+$" },
+          "description": { "type": "string", "minLength": 1 },
+          "files": { "type": "array", "items": { "type": "string" } },
+          "dependsOn": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "parallelGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["group", "tasks"],
+        "additionalProperties": false,
+        "properties": {
+          "group": { "type": "integer", "minimum": 1 },
+          "tasks": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "openQuestions": {
+      "type": "array",
+      "description": "Unresolved design or implementation questions the builder must address. Each entry becomes a required openQuestionsResolution in the builder handoff.",
+      "items": { "type": "string" }
+    },
+    "githubIssues": {
+      "type": "array",
+      "description": "GitHub issues created by the planner to track this phase's deliverables. One issue per logical deliverable group. Created immediately after the planner handoff is written.",
+      "items": {
+        "type": "object",
+        "required": ["title", "acs", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "acs": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^AC-\\d+$" },
+            "minItems": 1
+          },
+          "url": {
+            "type": "string",
+            "description": "GitHub issue URL, e.g. https://github.com/<owner>/<repo>/issues/N"
+          }
+        }
+      }
+    }
+  }
+}

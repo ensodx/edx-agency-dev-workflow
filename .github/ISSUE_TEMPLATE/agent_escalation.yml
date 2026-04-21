@@ -1,0 +1,56 @@
+name: Agent Escalation
+description: Created automatically by the orchestrator agent when it cannot proceed without human input.
+labels: ["agent-escalation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue was opened by the orchestrator agent. It requires a human decision before execution can continue.
+
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      placeholder: "e.g. 0.1"
+    validations:
+      required: true
+
+  - type: input
+    id: task
+    attributes:
+      label: Task
+      placeholder: "e.g. 1.3 -- Config loading"
+    validations:
+      required: true
+
+  - type: input
+    id: agent
+    attributes:
+      label: Blocking agent
+      placeholder: "e.g. builder, architect"
+    validations:
+      required: true
+
+  - type: input
+    id: handoff
+    attributes:
+      label: Handoff file
+      placeholder: "e.g. docs/log/phase-1/handoff-builder.json"
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question or blocker
+      description: The specific question that must be answered or decision that must be made before the agent can continue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Relevant background, options considered, and why the agent could not resolve this autonomously.
+    validations:
+      required: true

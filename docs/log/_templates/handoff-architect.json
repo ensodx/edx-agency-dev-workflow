@@ -1,0 +1,22 @@
+{
+  "$schema": "edx-agency/handoff/architect@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "architect",
+  "to": ["planner", "tester"],
+  "requirement": "One sentence: what needs to be built and why.",
+  "acceptanceCriteria": [
+    { "id": "AC-1", "criterion": "Measurable, independently verifiable condition.", "testable": true }
+  ],
+  "approach": "Brief description of the chosen design. Full rationale is in the ADRs.",
+  "adrs": [
+    "adr-001-topic.md"
+  ],
+  "constraintsDiscovered": [
+    "Non-obvious constraint the builder must respect."
+  ],
+  "risks": [
+    { "risk": "What could go wrong.", "mitigation": "How to address it, or null if open." }
+  ]
+}

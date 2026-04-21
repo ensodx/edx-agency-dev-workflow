@@ -1,0 +1,21 @@
+{
+  "$schema": "edx-agency/handoff/researcher@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "researcher",
+  "to": ["architect"],
+  "topicsResearched": [
+    {
+      "topic": "Library or pattern name",
+      "kbFile": "docs/kb/topic-name.md",
+      "keyFindings": "2-4 sentences covering the non-obvious findings the architect must know: version gotchas, pattern recommendations, integration constraints, API surface relevant to this phase."
+    }
+  ],
+  "kbFilesCreated": [
+    "docs/kb/topic-name.md"
+  ],
+  "openQuestions": [
+    "Unresolved question for the architect to address during design."
+  ]
+}

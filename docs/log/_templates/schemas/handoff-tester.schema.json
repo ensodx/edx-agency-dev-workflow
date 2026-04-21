@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "edx-agency/handoff/tester@1",
+  "type": "object",
+  "required": ["$schema", "phase", "date", "status", "from", "results", "acceptanceCriteriaStatus", "blockingFailures", "complianceChecks"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "const": "edx-agency/handoff/tester@1" },
+    "phase": { "type": "number" },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "status": { "type": "string", "enum": ["completed"] },
+    "from": { "type": "string", "const": "tester" },
+    "results": {
+      "type": "object",
+      "required": ["passed", "failed", "skipped"],
+      "additionalProperties": false,
+      "properties": {
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "acceptanceCriteriaStatus": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^AC-\\d+$" },
+          "status": { "type": "string", "enum": ["pass", "fail", "skipped"] },
+          "testFile": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "failingTests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "file", "severity", "gap"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "severity": { "type": "string", "enum": ["blocking", "non-blocking"] },
+          "gap": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "blockingFailures": { "type": "boolean" },
+    "coverageNotes": { "type": "string" },
+    "complianceChecks": {
+      "type": "object",
+      "description": "Grep-based compliance verification the tester must perform before writing this handoff. Each field is true if the violation was FOUND (i.e. true = problem exists).",
+      "required": ["tsIgnoreFound", "asAnyFound", "requireInSrcFound", "hardcodedUserStringsFound", "layerViolationFound", "esmImportsInvalid", "untrackedTempFilesFound"],
+      "additionalProperties": false,
+      "properties": {
+        "tsIgnoreFound": {
+          "type": "boolean",
+          "description": "grep for @ts-ignore in src/ -- true if any found"
+        },
+        "asAnyFound": {
+          "type": "boolean",
+          "description": "grep for ' as any' in src/ -- true if any found"
+        },
+        "requireInSrcFound": {
+          "type": "boolean",
+          "description": "grep for require( in src/ (excluding test files) -- true if any found"
+        },
+        "hardcodedUserStringsFound": {
+          "type": "boolean",
+          "description": "Spot-check that user-facing strings go through the project's i18n/localization system (if any) -- true if hardcoded strings found in unexpected locations"
+        },
+        "layerViolationFound": {
+          "type": "boolean",
+          "description": "grep for imports that violate the project's defined layer boundaries (see docs/kb/requirements.md) -- true if any found"
+        },
+        "esmImportsInvalid": {
+          "type": "boolean",
+          "description": "grep for relative imports without .js extension in src/ (non-test) -- true if any found"
+        },
+        "untrackedTempFilesFound": {
+          "type": "boolean",
+          "description": "git status shows untracked files or directories outside the project's expected directories (customize per project: typically src/, tests/, dist/, docs/, .github/) -- true if any found. Tests must not leave temp files on disk."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Required when any check is true. Detail which file/line and what was found."
+        }
+      }
+    }
+  }
+}

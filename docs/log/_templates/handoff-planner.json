@@ -1,0 +1,34 @@
+{
+  "$schema": "edx-agency/handoff/planner@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "planner",
+  "to": ["designer", "builder"],
+  "tasks": [
+    {
+      "id": "T-1",
+      "description": "What to implement.",
+      "files": ["src/..."],
+      "dependsOn": [],
+      "notes": "Implementation notes for the builder."
+    }
+  ],
+  "parallelGroups": [
+    {
+      "group": 1,
+      "tasks": ["T-1"],
+      "notes": "Tasks in this group have no shared state and can run concurrently."
+    }
+  ],
+  "openQuestions": [
+    "Unresolved question the builder must answer before or during implementation."
+  ],
+  "githubIssues": [
+    {
+      "title": "[Phase N.N] Deliverable name",
+      "acs": ["AC-1"],
+      "url": "https://github.com/<owner>/<repo>/issues/N"
+    }
+  ]
+}

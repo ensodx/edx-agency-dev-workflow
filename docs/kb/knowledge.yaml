@@ -1,0 +1,101 @@
+version: "1"
+updated: "2026-04-07"
+
+# Living project knowledge base.
+# Update whenever you discover a constraint, decision, gotcha, useful pattern, or resolved ambiguity.
+# requirements.md is the human-owned entry point for rules and constraints -- do not duplicate them here.
+#
+# EXAMPLE: This file is pre-populated with a minimal "hello world" HTTP server to show the
+# expected shape. Replace all values with your project's actual architecture when you start.
+
+index:
+  - file: "knowledge.yaml"
+    contents: "Project status, architecture, source layout, key interfaces, error codes, logging, config, CI, branch model"
+  - file: "requirements.md"
+    contents: "Runtime, toolchain, architecture rules, approved deps, design rules, security"
+  - file: "github-project.yaml"
+    contents: "GitHub Projects V2 IDs and field option IDs for the project board"
+  # Architect: add a row here each time you create a new research file in this directory.
+  # Keep each file small and focused on one topic.
+
+project:
+  status: "hello world complete -- ready to adapt"
+  srcExists: true
+  currentTarget:
+    phase: "0.1"
+    name: "Foundation & Setup"
+    description: "Working HTTP server with health endpoint"
+
+architecture:
+  model: "two-layer"
+  rule: "Requests flow top-down. HTTP layer must not import from src/index.ts."
+  layers:
+    - id: 1
+      name: "HTTP Layer"
+      path: "src/server.ts"
+      description: "Request handling, routing, response formatting"
+    - id: 2
+      name: "Config"
+      path: "src/config.ts"
+      description: "Zod-validated config loaded from .env"
+  crossCutting: "logging (pino), error codes"
+
+sourceLayout:
+  src:
+    server: "HTTP server and route handlers"
+    config: "Config loading and Zod schema"
+    errors: "AppErrorCode enum"
+    entryPoint: "index.ts"
+
+interfaces: []
+# Add entries here when the architect defines stable interfaces that multiple components
+# must implement. Example:
+#   - name: "RequestHandler"
+#     description: "Handles an incoming request and writes the response"
+#     rule: "New handlers implement this without modifying existing handlers."
+
+errorHandling:
+  enum: "AppErrorCode"
+  definedIn: "src/errors.ts"
+  codes:
+    - CONFIG_INVALID
+    - SERVER_ERROR
+  format: "JSON body with 'code' (machine-readable) and 'message' (human-readable) fields."
+
+logging:
+  library: "pino"
+  requiredFields: ["level", "time", "component", "message"]
+  requestFields: ["requestId"]
+
+configuration:
+  secretsFile: ".env"
+  secretsVars: ["PORT"]
+  validation: "Zod schema in src/config.ts"
+
+security:
+  responseHeaders:
+    - "X-Content-Type-Options: nosniff"
+    - "X-Frame-Options: DENY"
+    - "Cache-Control: no-store"
+  bodyLimit: "64 KB per request (enforced in src/server.ts)"
+  ocsf: "Security-relevant events must use OCSF 1.8.0 fields -- see requirements.md"
+
+npm:
+  publishing:
+    workflow: ".github/workflows/release.yml"
+    trigger: "GitHub Release published"
+    provenance: true
+    secret: "NPM_TOKEN"
+  entryPoint: "exports field in package.json (authoritative ESM entry point)"
+  prepublish: "npm run build"
+
+ci:
+  triggers: ["PRs targeting develop", "PRs targeting main"]
+  steps: ["lint", "typecheck", "test", "build"]
+  nodeMatrix: ["22", "24"]
+  dependabot: "weekly for npm deps and GitHub Actions"
+
+branchModel:
+  featureBranches: "off develop"
+  prTarget: "develop"
+  main: "updated manually for releases only"

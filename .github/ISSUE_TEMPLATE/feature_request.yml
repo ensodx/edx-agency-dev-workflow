@@ -1,0 +1,37 @@
+name: Feature Request
+description: Suggest an improvement or new feature
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting, check `tasks.md` -- your feature may already be planned.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Motivation
+      description: What problem does this solve? What use case does it enable?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature you'd like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative approaches you've considered?
+
+  - type: input
+    id: phase
+    attributes:
+      label: Relevant Phase
+      description: Which implementation phase does this relate to? (see tasks.md)
+      placeholder: "e.g. 0.2"

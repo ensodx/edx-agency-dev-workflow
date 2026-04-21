@@ -1,0 +1,36 @@
+{
+  "$schema": "edx-agency/handoff/tester@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "tester",
+  "results": {
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0
+  },
+  "acceptanceCriteriaStatus": [
+    { "id": "AC-1", "status": "pass", "testFile": "src/path/to/file.test.ts", "line": 0 }
+  ],
+  "failingTests": [
+    {
+      "name": "test name",
+      "file": "src/path/to/file.test.ts",
+      "line": 0,
+      "severity": "blocking",
+      "gap": "What gap this failure exposes. Do not delete or weaken this test."
+    }
+  ],
+  "blockingFailures": false,
+  "coverageNotes": "What is covered. What is explicitly not covered and why.",
+  "complianceChecks": {
+    "tsIgnoreFound": false,
+    "asAnyFound": false,
+    "requireInSrcFound": false,
+    "hardcodedUserStringsFound": false,
+    "layerViolationFound": false,
+    "esmImportsInvalid": false,
+    "untrackedTempFilesFound": false,
+    "notes": "Describe any violations found (file and line). Leave empty if all checks are false."
+  }
+}

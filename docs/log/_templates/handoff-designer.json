@@ -1,0 +1,14 @@
+{
+  "$schema": "edx-agency/handoff/designer@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "designer",
+  "localeKeysAdded": [],
+  "cliOutputSpecs": [
+    { "command": "node dist/index.js", "description": "What the startup output should look like and why.", "accessibilityNotes": "Color-independent, readable without ANSI." }
+  ],
+  "deferredItems": [
+    "Work explicitly out of scope for this phase. Builder must not implement these."
+  ]
+}

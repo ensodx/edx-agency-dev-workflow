@@ -1,0 +1,28 @@
+{
+  "$schema": "edx-agency/handoff/quality@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "from": "quality",
+  "scores": {
+    "codingStandards": 10,
+    "deadCode": 10,
+    "security": 10,
+    "testIntegrity": 10,
+    "overall": 10
+  },
+  "fixesMade": [
+    {
+      "file": "src/...",
+      "line": 0,
+      "issue": "What was wrong.",
+      "fix": "What was changed and why.",
+      "dimension": "codingStandards"
+    }
+  ],
+  "blockingIssues": [],
+  "testsRun": {
+    "passed": 0,
+    "failed": 0
+  }
+}

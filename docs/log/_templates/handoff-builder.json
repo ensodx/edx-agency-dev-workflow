@@ -1,0 +1,30 @@
+{
+  "$schema": "edx-agency/handoff/builder@1",
+  "phase": 0,
+  "date": "YYYY-MM-DD",
+  "status": "completed",
+  "blockedReason": null,
+  "blockedDetail": null,
+  "from": "builder",
+  "filesChanged": [
+    { "path": "src/...", "change": "created", "notes": "What changed and why." }
+  ],
+  "publicInterfaces": [
+    { "name": "InterfaceName", "file": "src/...", "signature": "export function foo(x: string): Promise<Bar>" }
+  ],
+  "openQuestionsResolution": [
+    {
+      "question": "Exact question text from the planner's open questions.",
+      "resolution": "How it was resolved and why. If deferred, explain why and to which phase."
+    }
+  ],
+  "edgeCasesFound": [
+    "Edge case the tester should specifically exercise -- discovered during implementation."
+  ],
+  "knownLimitations": [
+    "Deliberate choice or non-obvious constraint baked into this implementation."
+  ],
+  "deferredItems": [
+    "Work explicitly out of scope for this phase. Do not test for these."
+  ]
+}

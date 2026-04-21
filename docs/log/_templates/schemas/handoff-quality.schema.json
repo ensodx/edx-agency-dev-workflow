@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "edx-agency/handoff/quality@1",
+  "type": "object",
+  "required": ["$schema", "phase", "date", "status", "from", "scores", "fixesMade", "blockingIssues", "testsRun"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "const": "edx-agency/handoff/quality@1" },
+    "phase": { "type": "number" },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "status": { "type": "string", "enum": ["completed"] },
+    "from": { "type": "string", "const": "quality" },
+    "scores": {
+      "type": "object",
+      "description": "Quality scores on a 1-10 scale. Anything below 9 must be fixed before this handoff is written.",
+      "required": ["codingStandards", "deadCode", "security", "testIntegrity", "overall"],
+      "additionalProperties": false,
+      "properties": {
+        "codingStandards": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "TypeScript strict mode compliance, naming conventions, ESM discipline, no suppressions."
+        },
+        "deadCode": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "No unused exports, no unreachable branches, no commented-out code left in src/."
+        },
+        "security": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "OWASP Top 10 relevant to this surface: injection, secrets in source, insecure defaults, missing auth checks."
+        },
+        "testIntegrity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Assertions derive from spec text, not implementation. No softened assertions. No deleted tests."
+        },
+        "overall": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Weighted summary. Must be >= 9 for the handoff to have status completed."
+        }
+      }
+    },
+    "fixesMade": {
+      "type": "array",
+      "description": "Every fix applied by the quality agent. Empty array if nothing needed fixing.",
+      "items": {
+        "type": "object",
+        "required": ["file", "issue", "fix"],
+        "additionalProperties": false,
+        "properties": {
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "issue": { "type": "string", "minLength": 1 },
+          "fix": { "type": "string", "minLength": 1 },
+          "dimension": {
+            "type": "string",
+            "enum": ["codingStandards", "deadCode", "security", "testIntegrity"]
+          }
+        }
+      }
+    },
+    "blockingIssues": {
+      "type": "array",
+      "description": "Issues the quality agent could NOT fix inline (e.g. require architectural change). If non-empty, overall score must be < 9 and the validator must be informed.",
+      "items": {
+        "type": "object",
+        "required": ["file", "issue", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "issue": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "testsRun": {
+      "type": "object",
+      "description": "Test results after any fixes applied. Must match or improve on the tester's results.",
+      "required": ["passed", "failed"],
+      "additionalProperties": false,
+      "properties": {
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

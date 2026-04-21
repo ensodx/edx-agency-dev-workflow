@@ -1,0 +1,63 @@
+{
+  "name": "edx-agency-project",
+  "version": "0.1.0",
+  "description": "Project description goes here",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ensodx/edx-agency-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ensodx/edx-agency-project/issues"
+  },
+  "license": "Apache-2.0",
+  "author": "Enso DX <info@ensodx.com>",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc --project tsconfig.json",
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "start": "node dist/index.js",
+    "lint": "eslint src/",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.0",
+    "js-yaml": "^4.1.0",
+    "pino": "^10.3.0",
+    "zod": "^4.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^25.5.2",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.0",
+    "typescript-eslint": "^8.58.0",
+    "vitest": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
