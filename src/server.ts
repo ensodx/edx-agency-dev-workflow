@@ -42,7 +42,11 @@ function enforceBodyLimit(req: IncomingMessage): Promise<void> {
 }
 
 /** Handles a single incoming HTTP request. */
-async function handleRequest(req: IncomingMessage, res: ServerResponse, log: Logger): Promise<void> {
+async function handleRequest(
+  req: IncomingMessage,
+  res: ServerResponse,
+  log: Logger,
+): Promise<void> {
   const requestId = randomUUID()
   const reqLog = log.child({ requestId, method: req.method, url: req.url, component: 'server' })
 
@@ -53,7 +57,9 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, log: Log
   } catch {
     reqLog.warn('request body too large')
     res.writeHead(413)
-    res.end(JSON.stringify({ code: 'PAYLOAD_TOO_LARGE', message: 'Request body exceeds size limit.' }))
+    res.end(
+      JSON.stringify({ code: 'PAYLOAD_TOO_LARGE', message: 'Request body exceeds size limit.' }),
+    )
     return
   }
 
@@ -73,7 +79,9 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, log: Log
 
   reqLog.warn('route not found')
   res.writeHead(404)
-  res.end(JSON.stringify({ code: 'NOT_FOUND', message: 'Route not found. Check the URL and method.' }))
+  res.end(
+    JSON.stringify({ code: 'NOT_FOUND', message: 'Route not found. Check the URL and method.' }),
+  )
 }
 
 /** Creates and controls the HTTP server. */
