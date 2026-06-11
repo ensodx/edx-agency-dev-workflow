@@ -106,7 +106,10 @@ export function createApp(config: Config, log: Logger) {
             reject(err)
             return
           }
-          log.warn({ component: 'server', port: config.PORT }, 'configured port in use, using OS-assigned port')
+          log.warn(
+            { component: 'server', port: config.PORT },
+            'configured port in use, using OS-assigned port',
+          )
           server.listen(0, () => {
             const addr = server.address()
             const port = typeof addr === 'object' && addr !== null ? addr.port : 0

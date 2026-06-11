@@ -26,7 +26,6 @@ Phase:
 
 ### Code Quality
 - [ ] TypeScript strict mode passes -- no `@ts-ignore` or `as any`
-- [ ] Every new public function/interface has a JSDoc comment
 - [ ] No dead code or duplicate logic
 
 ### Logging & Privacy
