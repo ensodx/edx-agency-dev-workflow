@@ -73,8 +73,50 @@ exactly what a completed implementation cycle looks like -- use them as a refere
 
 ### 4. Start the orchestrator
 
-Open Claude Code and invoke the orchestrator agent with your Phase 0.1 requirements.
-It reads `docs/kb/` and `tasks.md`, then coordinates the full build cycle autonomously.
+Open Claude Code, select the `orchestrator` agent, and describe what you want to build.
+The orchestrator reads `docs/kb/` and `tasks.md`, writes the task breakdown, and
+coordinates the full build cycle autonomously.
+
+A good prompt names the phase, the deliverable, and 3-5 concrete acceptance criteria.
+Be specific about inputs, outputs, and quality constraints -- not about how to implement
+them. The agents handle implementation decisions.
+
+**Example 1 -- Responsive typography and accessibility showcase**
+
+```
+Phase 0.1 -- Typography Showcase Page
+
+Add a `/` route to the existing HTTP server that serves a responsive HTML page:
+- Use Bootstrap 5 via CDN (no npm install) with a responsive grid layout
+- Include a toggle button that switches between light and dark mode using
+  Bootstrap's data-bs-theme attribute; the button must be keyboard-reachable
+- Display all six heading levels (H1-H6), each followed by a paragraph of lorem
+  ipsum text containing an <a href="#section-N"> anchor link so that tab-key
+  navigation through links can be tested end to end
+- Pass WCAG 2.1 AA color contrast in both light and dark mode
+- Pass npm run build, npm run lint, and npm run test
+```
+
+**Example 2 -- Config update endpoint with Zod validation and OCSF security logging**
+
+```
+Phase 0.1 -- Config Update API
+
+Add a POST /config route to the existing HTTP server:
+- Accept a JSON body with two fields: logLevel (enum: trace|debug|info|warn|error)
+  and rateLimitRpm (integer, 1-10000); reject unknown fields (Zod strict mode)
+- Validate the body with Zod at the route boundary; return 400 + AppErrorCode on
+  any validation failure with a message that states what was wrong and what is
+  expected -- never echo raw user input back in the error body
+- On a valid request, apply the change in memory and log an OCSF Configuration
+  Change event (class_uid 5001) containing: activity_id, time, severity_id,
+  message, and the changed field names (field names only -- never log values,
+  which may contain secrets)
+- Produce an ADR explaining the decision to use in-memory config mutation vs.
+  process restart, including the tradeoffs considered
+- Integration tests must cover: valid input, invalid enum value, out-of-range
+  integer, extra unknown field, and empty body
+```
 
 ---
 
@@ -162,7 +204,9 @@ npm run build        # compile TypeScript to dist/
 npm run lint         # ESLint
 npm run format       # Prettier write
 npm run format:check # Prettier check (used in CI)
-npm run test         # Vitest
+npm run test         # Vitest (single run)
+npm run test:watch   # Vitest in watch mode
+npm run test:coverage # Vitest with coverage report
 npm run typecheck    # tsc --noEmit
 ```
 
