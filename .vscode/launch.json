@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+      "args": ["${workspaceFolder}/src/index.ts"],
+      "preLaunchTask": "build",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
