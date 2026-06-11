@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: Routes complex requests to specialist subagents and coordinates their execution. Use for multi-step tasks that span multiple concerns. Breaks work into phases, runs parallel tasks simultaneously, and verifies the outcome.
-model: claude-opus-4-6
+model: claude-sonnet-4-6
 allowed-tools: Read, Glob, Grep, Agent, mcp__sequential-thinking__sequentialthinking, mcp__github__create_issue, mcp__github__get_issue, mcp__github__list_issues, mcp__github__create_pull_request, mcp__github__get_pull_request
 ---
 
@@ -44,6 +44,8 @@ You read the handoff and decide what happens next. Agents do not route to each o
 
 **Rearchitect versioning:** when `[~]` is triggered and the architect rewrites `handoff-architect.json`, it must first rename the existing file to `handoff-architect.v1.json` (incrementing the version number on each cycle) before writing the new one. This preserves the decision trail.
 
+**Rearchitect circuit breaker:** before spawning the architect on a `needs-rearchitect` signal, count the `handoff-architect.v*.json` files in the phase folder. If the count is 2 or more (meaning two rearchitects have already been attempted), do NOT spawn the architect. Instead, escalate to HITL: create a GitHub issue (`agent-escalation`, P0, title: `[Phase N.N] Rearchitect loop limit reached`) with a body listing the blocked handoff path, the number of rearchitect attempts, and the last `blockedDetail`. Stop execution. This caps the most expensive loop in the pipeline.
+
 1. **Research** -- Spawn the researcher agent. Wait for `docs/log/phase-N/handoff-researcher.json` with `"status": "completed"`. The researcher writes KB files and identifies open questions for the architect.
 2. **Architect** -- Spawn the architect agent. Wait for `docs/log/phase-N/handoff-architect.json` to be written with `"status": "completed"`. If the architect escalates ambiguity, stop and ask the user.
 3. **Plan** -- Spawn the planner with the architect handoff path. Planner reads `handoff-architect.json` and writes to `tasks.md`. After the handoff is written, the planner creates GitHub issues immediately -- do not spawn designer or builder until issue URLs are recorded in `handoff-planner.json`.
@@ -57,6 +59,7 @@ You read the handoff and decide what happens next. Agents do not route to each o
    | `blocked` | `missing-dependency` | Mark task `[!]`, resolve dependency, re-spawn builder |
    | `blocked` | `scope-unclear` | Mark task `[!]`, escalate to user with the `blockedDetail` |
    | `blocked` | `external-blocker` | Mark task `[!]`, escalate to user with the `blockedDetail` |
+   | `blocked` | `needs-human-approval` | Mark task `[!]`. Builder must have written `docs/log/phase-N.N/exception-report.md`. Create a GitHub issue (`agent-escalation`, P0, title: `[Phase N.N] Human approval required`) with body linking to the exception report and blocked handoff. Stop -- do NOT spawn architect until human resumes. |
 6. **Test** -- Spawn the tester for each completed build task as soon as its `handoff-builder.json` is written. Pass the specific `handoff-builder.json` path and the `handoff-architect.json` path. Multiple tester instances can run in parallel if their scopes (file sets) do not overlap. Wait for `handoff-tester.json` per task.
 7. **Quality** -- Spawn the quality agent. It scores 4 dimensions and fixes everything below 9, re-scoring up to 3 passes. Wait for `handoff-quality.json`. If it escalates a dimension it cannot fix, mark `[!]` in `tasks.md` and relay to user.
 8. **Validate** -- Spawn the validator. Wait for `handoff-validator.json`. Route on the `"verdict"` field:

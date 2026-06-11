@@ -13,7 +13,7 @@
       "description": "Required when status is blocked. The orchestrator routes on this value -- do not use free text.",
       "oneOf": [
         { "type": "null" },
-        { "type": "string", "enum": ["needs-rearchitect", "missing-dependency", "scope-unclear", "external-blocker"] }
+        { "type": "string", "enum": ["needs-rearchitect", "missing-dependency", "scope-unclear", "external-blocker", "needs-human-approval"] }
       ]
     },
     "blockedDetail": {

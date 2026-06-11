@@ -8,6 +8,7 @@ jobs:
   release:
     name: Publish to npm
     runs-on: ubuntu-latest
+    if: false  # this repo is not published to npm
     permissions:
       contents: read
       id-token: write

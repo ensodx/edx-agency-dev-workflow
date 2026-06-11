@@ -99,3 +99,11 @@ branchModel:
   featureBranches: "off develop"
   prTarget: "develop"
   main: "updated manually for releases only"
+
+observability:
+  note: "Patterns to consider when a phase adds HTTP or integration boundaries. Not mandatory -- requires architect approval and dependency justification per requirements.md."
+  options:
+    - name: "pino-opentelemetry-transport"
+      purpose: "Bridge pino structured logs into OTel log signals for trace/span correlation. Additive over existing pino setup."
+    - name: "@opentelemetry/sdk-node + @opentelemetry/auto-instrumentations-node"
+      purpose: "Auto-instrument HTTP, DNS, and common Node.js modules with distributed tracing spans."

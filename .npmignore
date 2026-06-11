@@ -1,0 +1,26 @@
+# This package is private and not published to npm.
+# This file exists as a safety net in case "private": true is ever removed.
+
+# Source and tooling
+src/
+scripts/
+docs/
+tasks.md
+
+# Agent and CI definitions
+.claude/
+.github/
+
+# Test output
+dist/**/*.test.js
+dist/**/*.test.js.map
+dist/**/*.test.d.ts
+dist/**/*.test.d.ts.map
+
+# Config and environment
+.env*
+*.config.*
+tsconfig*.json
+eslint.config.*
+.prettierrc*
+vitest.config.*

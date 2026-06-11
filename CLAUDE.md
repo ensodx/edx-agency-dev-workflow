@@ -33,11 +33,13 @@ Define checkpoints rather than vague goals like "make it work."
 ```bash
 npm install          # install dependencies
 npm run build        # compile TypeScript to dist/
+npm run build:ci     # build with noise-reduced output (use in agent contexts)
 npm run dev          # run with live reload (tsx watch)
 npm run lint         # eslint src/
 npm run format       # prettier --write src/
 npm run format:check # prettier --check src/ (used in CI)
 npm run test         # vitest run
+npm run test:ci      # test with noise-reduced output (use in agent contexts)
 npm run typecheck    # tsc --noEmit
 ```
 
@@ -98,7 +100,9 @@ researcher -> architect -> planner -(issues created)-> designer -> builder -> te
                                                                                PASS -> close issues -> PR -> phase-summary
 ```
 
-On builder `blocked` status: route back to architect for a rearchitect loop.
+On builder `blocked` with `needs-rearchitect`: route back to architect for a rearchitect loop (max 2 rearchitects; on 3rd, check `handoff-architect.v*.json` count and escalate to HITL if >= 2).
+On builder `blocked` with `needs-human-approval`: write exception-report.md, open GitHub issue, stop and wait for human.
+Builder self-escalates to `needs-human-approval` after 3 failed fix attempts on the same error within a single invocation.
 On validator FAIL: builder fixes blocking issues, quality re-runs, validator re-runs (max 3 retries; on 4th failure, escalate to user).
 
 **Responsibility split:**
@@ -172,8 +176,8 @@ Reads ALL previous handoffs. Implements the code.
 3. Read every ADR in `docs/log/phase-N.N/`.
 4. Check the planner's `openQuestions` field in `handoff-planner.json` -- resolve each one explicitly in `openQuestionsResolution`.
 
-**After implementing:** Run `npm run build`, `npm run typecheck`, `npm run lint`, `npm run test`.
-All must pass before writing the handoff.
+**After implementing:** Run `npm run build:ci`, `npm run typecheck`, `npm run lint`, `npm run test:ci`.
+All must pass before writing the handoff. (`build:ci` and `test:ci` pipe output through a noise-reduction filter -- use these instead of bare `build`/`test` in agent contexts.)
 
 **Output:** `docs/log/phase-N.N/handoff-builder.json`
 
@@ -233,7 +237,7 @@ and the validator will pick it up.
   softened assertions. No deleted tests. Tests that were weakened to pass score 1.
 
 **Rules:**
-- Run `npm run test` after making any fix. If tests break, revert that fix and add it to
+- Run `npm run test:ci` after making any fix. If tests break, revert that fix and add it to
   `blockingIssues` with the reason.
 - Do NOT rewrite working code for style preferences. Fix violations, not aesthetics.
 - Do NOT add comments, docstrings, or type annotations to code you didn't touch.

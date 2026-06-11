@@ -60,7 +60,7 @@ Map your full scoring review to these four as follows:
 - `testIntegrity` -- test quality dimension directly
 
 Report the lowest sub-score within each group. If any dimension is below 9, list fixes in `fixesMade`.
-Always populate `testsRun` with the result of `npm run test` after any fix pass (or the baseline if no fixes were needed).
+Always populate `testsRun` with the result of `npm run test:ci` after any fix pass (or the baseline if no fixes were needed).
 
 ## Process
 

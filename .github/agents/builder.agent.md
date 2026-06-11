@@ -25,6 +25,14 @@ Before writing anything:
 6. **Errors** -- Make errors explicit and informative. Use the project's error conventions.
 7. **Logging** -- Structured logs at key boundaries. Follow project logging rules.
 
+## Retry limit
+
+If you have made three or more distinct code changes attempting to fix the same build or
+test error without a passing run, stop. Do not attempt a fourth approach. Write a blocked
+handoff with `needs-human-approval` and document the approaches already tried in
+`blockedDetail`. Continuing to iterate past three failed attempts signals a constraint
+that cannot be resolved without human input.
+
 ## Test integrity
 
 **When a test fails, fix the underlying code. Never modify a test to make it pass.**
@@ -46,5 +54,8 @@ before changing the test. If uncertain, ask -- do not guess.
   | A required file, interface, or service is missing | `blocked` | `missing-dependency` |
   | The task scope is too ambiguous to proceed | `blocked` | `scope-unclear` |
   | An external system or constraint is blocking | `blocked` | `external-blocker` |
+  | Fix requires a decision only a human can make (license, policy, scope, budget) | `blocked` | `needs-human-approval` |
 
   Set `blockedDetail` to a human-readable explanation when blocked. The orchestrator ignores `blockedDetail` for routing but it is passed to the next agent.
+
+  When using `needs-human-approval`: before writing the handoff, write `docs/log/phase-N.N/exception-report.md` using the template at `docs/log/_templates/exception-report.md`. The orchestrator will not delegate to the architect until a human has reviewed the report and resumed execution.
