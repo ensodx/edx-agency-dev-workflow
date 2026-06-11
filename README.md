@@ -10,7 +10,7 @@ workflow built for Claude Code and GitHub Copilot.
 
 ## What this template includes
 
-**Toolchain** -- TypeScript 6 strict, ESLint 10, Prettier 3.8, Vitest 4, Node 24 LTS.
+**Toolchain** -- TypeScript 6 strict, ESLint 10, Prettier 3.8, Vitest 4, Node 25.
 
 **Agentic workflow** -- A 9-agent system (researcher, architect, planner, designer,
 builder, tester, quality, validator, and orchestrator) that coordinates autonomous development through structured JSON handoffs with schema validation.
@@ -199,7 +199,7 @@ CLAUDE.md              Build commands and workflow guidance for Claude Code
 
 ```bash
 npm install          # install dependencies
-npm run dev          # run with live reload (node --watch)
+npm run dev          # run with live reload (tsx watch)
 npm run build        # compile TypeScript to dist/
 npm run lint         # ESLint
 npm run format       # Prettier write

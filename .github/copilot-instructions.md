@@ -36,7 +36,7 @@ Define checkpoints rather than vague goals like "make it work."
 ```bash
 npm install          # install dependencies
 npm run build        # compile TypeScript to dist/
-npm run dev          # run with live reload (node --watch)
+npm run dev          # run with live reload (tsx watch)
 npm run lint         # eslint src/
 npm run format       # prettier --write src/
 npm run format:check # prettier --check src/ (used in CI)
