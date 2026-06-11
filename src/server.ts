@@ -97,9 +97,23 @@ export function createApp(config: Config, log: Logger) {
   })
 
   return {
-    /** Starts listening on the configured port. */
+    /** Starts listening on the configured port, falling back to an OS-assigned port on EADDRINUSE. */
     start(): Promise<void> {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
+        server.once('error', (err: Error) => {
+          const { code } = err as NodeJS.ErrnoException
+          if (code !== 'EADDRINUSE') {
+            reject(err)
+            return
+          }
+          log.warn({ component: 'server', port: config.PORT }, 'configured port in use, using OS-assigned port')
+          server.listen(0, () => {
+            const addr = server.address()
+            const port = typeof addr === 'object' && addr !== null ? addr.port : 0
+            log.info({ component: 'server', port }, 'server started')
+            resolve()
+          })
+        })
         server.listen(config.PORT, () => {
           log.info({ component: 'server', port: config.PORT }, 'server started')
           resolve()
